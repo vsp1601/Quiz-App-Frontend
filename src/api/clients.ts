@@ -3,6 +3,8 @@ import axios, { AxiosError } from 'axios';
 import { AxiosHeaders } from 'axios';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { normalizeGender, normalizeCategory } from '../utils/filters';
+import { RecommendationResponse } from '../types';
 
 /**
  * Resolve the API base URL.
@@ -108,13 +110,11 @@ export async function logout() {
 }
 
 // --------------------- Products ---------------------
-export async function getRandomProducts(params: {
-  count?: number;
-  gender?: string;
-  category?: string;
-}) {
+export async function getRandomProducts(params: { count?: number; gender?: string; category?: string }) {
+  const gender = normalizeGender(params?.gender);
+  const category = normalizeCategory(params?.category);
   const { data } = await api.get('/api/v1/products/products/random', {
-    params: { count: 20, ...params },
+    params: { count: params?.count ?? 20, gender, category },
   });
   return data as any[];
 }
@@ -156,15 +156,15 @@ export async function rateProductsBulk(
 }
 
 // --------------------- Recommendations ---------------------
-export async function getRecommendations(params: {
-  count?: number;
-  gender?: string;
-  category?: string;
-}) {
-  const { data } = await api.get('/api/v1/recommendations/recommendations', {
-    params: { count: 20, ...params },
+// ---- Recommendations (unwrap + normalize) ----
+export async function getRecommendations(params: { count?: number; gender?: string; category?: string }) {
+  const gender = normalizeGender(params?.gender);
+  const category = normalizeCategory(params?.category);
+  const { data } = await api.get<RecommendationResponse>('/api/v1/recommendations/recommendations', {
+    params: { count: params?.count ?? 20, gender, category },
   });
-  return data as any[];
+  // Safely unwrap; backend returns { recommendations: [...] }
+  return Array.isArray(data?.recommendations) ? data.recommendations : [];
 }
 
 export async function retrainModel() {

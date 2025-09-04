@@ -17,7 +17,7 @@ function Gate() {
     <NavigationContainer
       theme={{
         ...DarkTheme,
-        colors: { ...DarkTheme.colors, background: colors.bg, card: colors.card, text: colors.text }
+        colors: { ...DarkTheme.colors, card: colors.card, text: colors.text }
       }}
     >
       {token ? (

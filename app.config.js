@@ -19,13 +19,14 @@ module.exports = {
     },
     web: {
       bundler: "metro",
-      output: "static",               // 🔒 force static, no SSR
+      output: "static",
       favicon: "./assets/images/favicon.png",
     },
     extra: {
-      API_BASE_URL: "http://192.168.0.2:8000",
+      API_BASE_URL: "http://192.168.1.11:8000",
     },
     plugins: [
+      // plugin #1 with options
       [
         "expo-splash-screen",
         {
@@ -35,7 +36,8 @@ module.exports = {
           backgroundColor: "#ffffff",
         },
       ],
+      // plugin #2 (no options)
+      "expo-secure-store",
     ],
-    // 🚫 No `experiments.typedRoutes`, no `expo-router` plugin
   },
 };
