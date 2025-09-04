@@ -1,16 +1,24 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { login as loginApi, register as registerApi, logout as logoutApi } from '../api/clients';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { login as loginApi, register as registerApi, logout as logoutApi } from "../api/clients";
 
-interface AuthContextType {
-  token?: string | null;
+type AuthContextType = {
+  token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-}
+};
 
-const AuthContext = createContext<AuthContextType>({} as any);
+const TOKEN_KEY = "token";
+
+const AuthContext = createContext<AuthContextType>({
+  token: null,
+  loading: true,
+  login: async () => {},
+  register: async () => {},
+  logout: async () => {},
+});
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
@@ -18,26 +26,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     (async () => {
-      const t = await AsyncStorage.getItem('token');
-      setToken(t);
-      setLoading(false);
+      try {
+        const saved = await AsyncStorage.getItem(TOKEN_KEY);
+        setToken(saved);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const t = await loginApi(email, password);
+  const persistToken = async (t: string | null) => {
     setToken(t);
+    if (t) {
+      await AsyncStorage.setItem(TOKEN_KEY, t);
+    } else {
+      await AsyncStorage.removeItem(TOKEN_KEY);
+    }
+  };
+
+  const login = async (email: string, password: string) => {
+    const t = await loginApi(email, password); // must return token
+    await persistToken(t);
   };
 
   const register = async (email: string, password: string) => {
-    await registerApi(email, password);
-    const t = await AsyncStorage.getItem('token');
-    setToken(t);
+    // Prefer API returning a token on register
+    const maybeToken = await registerApi(email, password);
+    if (typeof maybeToken === "string" && maybeToken.length > 0) {
+      await persistToken(maybeToken);
+      return;
+    }
+    // If not, fallback to login after register
+    const t = await loginApi(email, password);
+    await persistToken(t);
   };
 
   const logout = async () => {
-    await logoutApi();
-    setToken(null);
+    try {
+      await logoutApi();
+    } finally {
+      await persistToken(null); // flips to Login stack via Gate
+    }
   };
 
   return (
