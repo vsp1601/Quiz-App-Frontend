@@ -9,15 +9,7 @@ A modern React Native mobile application built with Expo that provides personali
 - **Swipe Interface**: Tinder-like card swiping to rate fashion items (like/dislike)
 - **Smart Recommendations**: AI-powered personalized fashion recommendations based on user preferences
 - **Advanced Filtering**: Dynamic filter system for gender, category, color, season, and more
-- **Product Details**: Detailed product information with high-quality images
 - **Responsive Design**: Optimized for both iOS and Android devices
-
-### User Experience
-- **Dark Theme**: Modern dark UI with elegant gradients and smooth animations
-- **Gesture Support**: Intuitive swipe gestures with haptic feedback
-- **Pull-to-Refresh**: Easy content refresh functionality
-- **Loading States**: Smooth loading indicators and error handling
-- **Offline Support**: Robust error handling and retry mechanisms
 
 ## 🛠 Tech Stack
 
@@ -45,7 +37,6 @@ A modern React Native mobile application built with Expo that provides personali
 ### Main Application
 - **Swipe Screen**: Interactive card swiping interface for rating products
 - **Recommendations Screen**: Personalized fashion recommendations in a scrollable list
-- **Product Detail Screen**: Detailed product information and specifications
 
 ## 🏗 Project Structure
 
@@ -118,7 +109,7 @@ npm run lint
 
 # Reset project (removes example code)
 npm run reset-project
-```
+
 
 ## 🔧 Configuration
 
@@ -134,9 +125,6 @@ Update API endpoints in `src/api/clients.ts` and `src/services/api.ts` to match 
 
 ## 🎨 Customization
 
-### Theme
-Modify colors and styling in `src/theme/colors.ts` to customize the app's appearance.
-
 ### Filters
 Add or modify filter options in `src/data/staticFilters.ts` to customize product filtering categories.
 
@@ -149,54 +137,19 @@ Add or modify filter options in `src/data/staticFilters.ts` to customize product
 ## 🔒 Security Features
 
 - Secure token storage using Expo Secure Store
-- Input validation and sanitization
-- Error handling and user feedback
+
 - Network request timeout and retry logic
 
-## 🚀 Deployment
 
-### Building for Production
 
-1. **Configure app.json** with your app details
-2. **Build for iOS**
-   ```bash
-   npx expo build:ios
-   ```
-3. **Build for Android**
-   ```bash
-   npx expo build:android
-   ```
 
-### App Store Submission
-- Follow platform-specific guidelines for iOS App Store and Google Play Store
-- Ensure all required permissions and metadata are configured
-- Test thoroughly on physical devices before submission
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Check the [Expo documentation](https://docs.expo.dev/)
-- Join the [Expo Discord community](https://chat.expo.dev/)
 
 ## 🔮 Future Enhancements
 
 - [ ] Social features (sharing, following)
 - [ ] Wishlist functionality
 - [ ] Push notifications
-- [ ] AR try-on features
 - [ ] Advanced recommendation algorithms
-- [ ] Multi-language support
 - [ ] Accessibility improvements
